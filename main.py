@@ -77,6 +77,7 @@ class ClassIterator:
         
         raise StopIteration
 
+
 if __name__ == "__main__":
     class_labels = ['1', '2', '3', '4', '5']
     home = os.path.expanduser('~')
