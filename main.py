@@ -22,11 +22,28 @@ def create_annotation_file(dataset_path, annotation_file_path):
                         absolute_path = os.path.join(root, file)
                         relative_path = os.path.relpath(absolute_path, dataset_path)
                         writer.writerow([absolute_path, relative_path])
+
+def copy_dataset_with_class_names(dataset_dir, target_dir, class_labels):
+    if not os.path.exists(target_dir):
+        os.makedirs(target_dir)
+    for class_label in class_labels:
+        for index, filename in enumerate(os.listdir(os.path.join(dataset_dir, class_label))):
+            if os.path.splitext(filename)[1] != ".txt":
+                continue
+            src_file = os.path.join(dataset_dir, class_label, filename)
+            new_filename = f'{class_label}_{index:04}{os.path.splitext(filename)[1]}'
+            dst_file = os.path.join(target_dir, new_filename)
+            shutil.copyfile(src_file, dst_file)
+
 if __name__ == "__main__":
     class_labels = ['1', '2', '3', '4', '5']
     home = os.path.expanduser('~')
     home_path = os.path.join("C:\\")
-    
+    #Create annotation file
     dataset_dir = os.path.join(home_path, "dataset")
     target_dir = os.path.join(home_path, "dataset\\annotation.csv")
     create_annotation_file(dataset_dir, target_dir)
+    #Copy dataset with names
+    dataset_dir = os.path.join(home_path, "dataset")
+    target_dir = os.path.join(home_path, "copy dataset")
+    copy_dataset_with_class_names(dataset_dir, target_dir, class_labels)
